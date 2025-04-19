@@ -27,6 +27,6 @@ export class SlotMachine {
   }
 
   public random() {
-    return Math.floor(Math.random() * 3) + 1;
+    return Math.floor(Math.random() * 9) + 1;
   }
 }
