@@ -33,6 +33,8 @@ export const command: Command = {
     const bet = interaction.options.getInteger("bet") ?? 0;
     removeCoin(interaction.user, bet);
     const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
+    const quick = interaction.options.getBoolean("quick") ?? false;
+
     await interaction.reply({
       content: "Pulling the lever...",
       flags: ephemeral ? [64] : [],
