@@ -16,17 +16,10 @@ export const command: Command = {
         description: "Make the reply ephemeral",
         type: 5,
       },
-      {
-        name: "quick",
-        description: "Quick spin",
-        type: 5,
-      }
     ],
   },
   async execute(interaction) {
     const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
-    const quick = interaction.options.getBoolean("quick") ?? false;
-
     await interaction.reply({
       content: "Pulling the lever...",
       flags: ephemeral ? [64] : [],
@@ -34,31 +27,20 @@ export const command: Command = {
     await timeout(1500);
     const machine = new SlotMachine();
     machine.spin();
-
-    if (quick) {
-      await interaction.editReply({
-        content: replace([
-          `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-          `あなたは... %${machine.judge()}！`,
-        ]),
-      });
-      return;
-    }
-
     await interaction.editReply({
       content: replace(`# %${machine.results[0]} ...`),
     });
-    await timeout(1500);
+    await timeout(1000);
     await interaction.editReply({
       content: replace(`# %${machine.results[0]} %${machine.results[1]} ...`),
     });
-    await timeout(1500);
+    await timeout(1250);
     await interaction.editReply({
       content: replace(
         `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`
       ),
     });
-    await timeout(1000);
+    await timeout(750);
     await interaction.editReply({
       content: replace([
         `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
