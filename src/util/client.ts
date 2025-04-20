@@ -51,6 +51,9 @@ export class SlotBot extends Client {
     if (!this.config.secure.token) {
       throw new Error("No token provided");
     }
+    if (!this.config.secure.applicationId) {
+      throw new Error("No application id provided.");
+    }
     if (!this.config.permissions.owner.length) {
       throw new Error("No owner provided");
     }
@@ -77,7 +80,7 @@ export class SlotBot extends Client {
 
     new REST({ version: "10" })
       .setToken(this.config.secure.token)
-      .put(Routes.applicationCommands("1363064004808802364"), {
+      .put(Routes.applicationCommands(this.config.secure.applicationId), {
         body: commandData,
       });
   }
