@@ -1,5 +1,6 @@
 import type { Config } from "../types/config";
 import { colors } from "../util/placeholder";
+import "dotenv/config";
 
 const version = "1.0.0-dev";
 const config: Config = {
@@ -7,6 +8,7 @@ const config: Config = {
   development: version.includes("dev"),
   isBun: typeof Bun !== "undefined",
   secure: {
+    applicationId: process.env.applicationId ?? "",
     token: process.env.token ?? "",
   },
   permissions: {
@@ -17,6 +19,7 @@ const config: Config = {
   },
 };
 export function loadConfig() {
-  if (config.development) console.log(colors.gray + "config called", colors.reset);
+  if (config.development)
+    console.log(colors.gray + "config called", colors.reset);
   return config;
 }
