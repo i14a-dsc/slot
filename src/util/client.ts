@@ -14,7 +14,7 @@ import fs from "fs";
 import { loadConfig } from "../config/config";
 import { interactionCreate } from "../events/handlers/interactionCreate";
 import { ready } from "../events/handlers/ready";
-import type { Command } from "../types/command";
+import type { APIApplicationCommand, Command } from "../types/command";
 
 export class SlotBot extends Client {
   config: Config = loadConfig();
@@ -51,6 +51,9 @@ export class SlotBot extends Client {
     if (!this.config.secure.token) {
       throw new Error("No token provided");
     }
+    if (!this.config.secure.applicationId) {
+      throw new Error("No application id provided.");
+    }
     if (!this.config.permissions.owner.length) {
       throw new Error("No owner provided");
     }
@@ -67,7 +70,7 @@ export class SlotBot extends Client {
       .readdirSync((this.config.isBun ? "src/" : "dist/") + dir, "utf-8")
       .filter((f) => f.endsWith(this.config.isBun ? ".ts" : ".js"));
 
-    let commandData: unknown[] = [];
+    let commandData: APIApplicationCommand[] = [];
 
     for (const file of files) {
       commandData.push(
@@ -77,7 +80,7 @@ export class SlotBot extends Client {
 
     new REST({ version: "10" })
       .setToken(this.config.secure.token)
-      .put(Routes.applicationCommands("1363064004808802364"), {
+      .put(Routes.applicationCommands(this.config.secure.applicationId), {
         body: commandData,
       });
   }

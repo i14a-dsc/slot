@@ -30,6 +30,7 @@ export class Placeholder {
 
   constructor(
     public value: string | string[] = "",
+    /* eslint-disable-next-line no-unused-vars */
     public noColor: boolean = false
   ) {
     if (Array.isArray(value)) {

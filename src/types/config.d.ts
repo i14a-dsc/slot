@@ -8,6 +8,7 @@ export interface Config {
 
 export interface SecureConfig {
   token: string;
+  applicationId: string;
 }
 
 export interface ConfigPermissions {
