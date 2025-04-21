@@ -4,17 +4,17 @@ import { getCoins } from "../../util/utilities";
 
 export const command: Command = {
   data: {
-    name: "daily",
-    description: "Claim your Daily reward",
+    name: "coin",
+    description: "Check your current amount of coins",
     type: 1,
     integration_types: [0, 1],
     contexts: [0, 1, 2],
   },
   async execute(interaction) {
-    const current = await getCoins(interaction.user);
+    const current = getCoins(interaction.user);
 
     await interaction.reply({
-      content: replace([`You have ${current}%coin!`]),
+      content: replace(`You have ${current}%coin!`),
       flags: [64],
     });
   },
