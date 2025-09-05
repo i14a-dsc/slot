@@ -4,7 +4,13 @@ import { addCoin, claimDailyBonus, randomInt } from "../../util/utilities";
 
 export const command: Command = {
   data: {
+    name_localizations: {
+      ja: "デイリーボーナス",
+    },
     name: "daily",
+    description_localizations: {
+      ja: "デイリーボーナスを受け取ります。",
+    },
     description: "Claim your Daily reward",
     type: 1,
     integration_types: [0, 1],
@@ -27,7 +33,7 @@ export const command: Command = {
       content: replace([
         `You claimed your Daily reward!`,
         `You received ${rewardCoins}%coin!`,
-        `You now have ${current}%coin.`,
+        `Now your current amount of coins is ${current}%coin.`,
       ]),
       flags: [64],
     });

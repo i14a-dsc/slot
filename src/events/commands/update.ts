@@ -1,6 +1,7 @@
 import { ButtonStyle, ComponentType } from "discord.js";
 import type { Command } from "../../types/command";
 import { exec } from "child_process";
+import { client } from "../..";
 
 export const command: Command = {
   data: {
@@ -14,6 +15,13 @@ export const command: Command = {
     integration_types: [0, 1],
   },
   execute: async (interaction) => {
+    if (!client.config.permissions.admin.includes(interaction.user.id)) {
+      await interaction.reply({
+        content: "This command is cannot be used by .",
+        flags: [64],
+      });
+      return;
+    }
     await interaction.reply({
       content: "Updating from github...",
       flags: [64],
