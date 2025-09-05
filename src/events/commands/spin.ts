@@ -2,7 +2,7 @@ import type { Command } from "../../types/command";
 import { replace } from "../../util/placeholder";
 import { SlotMachine } from "../../util/slot";
 import { timeout } from "../../util/timeout";
-import { addCoin, removeCoin } from "../../util/utilities";
+import { addCoin, getCoins, removeCoin } from "../../util/utilities";
 
 export const command: Command = {
   data: {
@@ -31,6 +31,21 @@ export const command: Command = {
   },
   async execute(interaction) {
     const bet = interaction.options.getInteger("bet") ?? 0;
+    if (bet < 0) {
+      await interaction.reply({
+        content: "You cannot bet negative coins!",
+        flags: [64],
+      });
+      return;
+    }
+    const currentCoins = getCoins(interaction.user);
+    if (bet > currentCoins) {
+      await interaction.reply({
+        content: "You don't have enough coins!",
+        flags: [64],
+      });
+      return;
+    }
     removeCoin(interaction.user, bet);
     const ephemeral = interaction.options.getBoolean("ephemeral") ?? false;
     const quick = interaction.options.getBoolean("quick") ?? false;
@@ -79,6 +94,7 @@ export const command: Command = {
               `賭けた${bet}%coinは戻ってきました！`,
             ]),
           });
+          addCoin(interaction.user, bet);
           return;
         case "lose":
           await interaction.editReply({

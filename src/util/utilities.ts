@@ -23,7 +23,8 @@ export function claimDailyBonus({ username, id }: MinimalUserObject): {
     );
     return { success: true, json: d };
   } else {
-    if (data[index].date[0] === getDate()[0]) return { success: false };
+    if (data[index].date.join("") === getDate().join(""))
+      return { success: false };
     data[index].count += 1;
     const [day, month, year] = getDate();
     const [lastDay, lastMonth, lastYear] = data[index].date;
