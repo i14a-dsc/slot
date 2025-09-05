@@ -1,32 +1,29 @@
 export class SlotMachine {
-  public declare results: number[];
+  private _results: number[] = [];
+
   constructor() {}
 
-  public spin() {
-    let results: number[] = [];
-    for (let i = 0; i < 3; i++) {
-      results.push(this.random());
-    }
-
-    this.results = results;
-    return results;
+  public spin(): number[] {
+    this._results = Array.from({ length: 3 }, () => this.random());
+    return this._results;
   }
 
-  public judge(result: number[] = this.results) {
-    if (result[0] === result[1] && result[1] === result[2]) {
+  public judge() {
+    const [a, b, c] = this._results;
+    if (a === b && b === c) {
       return "win";
     }
-    if (
-      result[0] === result[1] ||
-      result[1] === result[2] ||
-      result[0] === result[2]
-    ) {
+    if ((a === b && b !== c) || (a === c && b !== a) || (b === c && a !== b)) {
       return "reach";
     }
     return "lose";
   }
 
-  public random() {
+  private random() {
     return Math.floor(Math.random() * 9) + 1;
+  }
+
+  get results() {
+    return this._results;
   }
 }
