@@ -84,4 +84,13 @@ export class SlotBot extends Client {
         body: commandData,
       });
   }
+
+  public async stop(stopCode: number = 0) {
+    try {
+      await this.destroy();
+    } catch (error) {
+      console.error("Client doesn't initialized.");
+    }
+    process.exit(stopCode);
+  }
 }
