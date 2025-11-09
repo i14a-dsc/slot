@@ -1,10 +1,23 @@
 export class SlotMachine {
   private _results: number[] = [];
+  private static jackpotPercentage = 0.001;
+  private static matchPercentage = 0.05;
 
   constructor() {}
 
   public spin(): number[] {
-    this._results = Array.from({ length: 3 }, () => this.random());
+    const rand = Math.random();
+    if (rand < SlotMachine.jackpotPercentage) {
+      this._results = [7, 7, 7];
+    } else if (
+      rand <
+      SlotMachine.jackpotPercentage + SlotMachine.matchPercentage
+    ) {
+      const num = Math.floor(Math.random() * 6) + 1;
+      this._results = [num, num, num];
+    } else {
+      this._results = Array.from({ length: 3 }, () => this.random());
+    }
     return this._results;
   }
 

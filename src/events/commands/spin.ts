@@ -73,45 +73,66 @@ export const command: Command = {
       });
       await timeout(700);
     }
-    if (bet > 0)
-      switch (machine.judge()) {
-        case "win":
-          const { current } = addCoin(interaction.user, bet * 2);
-          await interaction.editReply({
-            content: replace([
-              `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-              `あなたは... %${machine.judge()}です！`,
-              `You won ${bet}%coin!`,
-              `Now your current amount of coins is ${current}%coin!`,
-            ]),
-          });
-          return;
-        case "reach":
-          await interaction.editReply({
-            content: replace([
-              `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-              `あなたは... %${machine.judge()}です！`,
-              `Your bet ${bet}%coin has been returned!`,
-            ]),
-          });
-          return;
-        case "lose":
-          await interaction.editReply({
-            content: replace([
-              `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-              `あなたは... %${machine.judge()}です！`,
-              `You lost ${bet}%coin...`,
-              `Now your current amount of coins is ${getCoins(
-                interaction.user
-              )}%coin!`,
-            ]),
-          });
-          return;
+    if (bet > 0) {
+      const result = machine.judge();
+      if (result === "win") {
+        const isJackpot = machine.results.every((num) => num === 7);
+        const isTriple =
+          machine.results[0] >= 1 &&
+          machine.results[0] <= 6 &&
+          machine.results.every((num) => num === machine.results[0]);
+
+        let multiplier = 0;
+        if (isJackpot) {
+          multiplier = 100;
+        } else if (isTriple) {
+          multiplier = 10;
+        } else {
+          multiplier = 2;
+        }
+
+        const winnings = bet * multiplier;
+        const { current } = addCoin(interaction.user, winnings);
+
+        await interaction.editReply({
+          content: replace([
+            `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
+            `あなたは... 大当たりです！`,
+            isJackpot
+              ? `# :crown: JACKPOT!!\n大当たり！ あなたは ${winnings}%coin 勝ちました！`
+              : `あなたは ${winnings}%coin (${multiplier}x) 勝ちました！`,
+            `あなたの現在のコイン残高は ${current}%coin になりました！`,
+          ]),
+        });
+        return;
+      } else if (result === "reach") {
+        await interaction.editReply({
+          content: replace([
+            `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
+            `あなたは... リーチです！`,
+            `あなたの賭け金 ${bet}%coin が返還されました！`,
+          ]),
+        });
+        return;
+      } else {
+        await interaction.editReply({
+          content: replace([
+            `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
+            `あなたは... ${machine.judge()}です！`,
+            `あなたの賭け金 ${bet}%coin が闇の中へ...`,
+            `あなたの現在のコイン残高は ${getCoins(
+              interaction.user
+            )}%coin です`,
+          ]),
+        });
+        return;
       }
+    }
+
     await interaction.editReply({
       content: replace([
         `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-        `あなたは... %${machine.judge()}です！`,
+        `あなたは... ${machine.judge()}です！`,
       ]),
     });
   },
