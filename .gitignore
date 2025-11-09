@@ -4,8 +4,6 @@ data/timeout.json
 *.tmp
 data/coins.json
 data/daily.json
-data/daily.json
-data/coins.json
 
 # Logs
 

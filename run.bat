@@ -1,4 +1,6 @@
 @echo off
+pushd %~dp0
 :a
-bun start
+cmd /c bun i
+cmd /c bun .
 goto :a
