@@ -1,6 +1,6 @@
 import type { Command } from "../../types/command";
 import { replace } from "../../util/placeholder";
-import { addCoin, claimDailyBonus, randomInt } from "../../util/utilities";
+import { addCoin } from "../../util/utilities";
 
 export const command: Command = {
   data: {
@@ -9,25 +9,31 @@ export const command: Command = {
     type: 1,
     integration_types: [0, 1],
     contexts: [0, 1, 2],
+    options: [
+      {
+        name: "user",
+        description: "The user to give the coins to",
+        type: 6,
+        required: true,
+      },
+      {
+        name: "amount",
+        description: "The amount of coins to give",
+        type: 4,
+        required: true,
+      },
+    ],
   },
   async execute(interaction) {
-    const daily = claimDailyBonus(interaction.user);
+    const user = interaction.options.getUser("user", true);
+    const amount = interaction.options.getInteger("amount", true);
 
-    if (!daily.success) {
-      await interaction.reply({
-        content: "You already claimed your Daily reward today!",
-        flags: [64],
-      });
-      return;
-    }
-    const rewardCoins = randomInt(50, 200);
-    const { current } = addCoin(interaction.user, rewardCoins);
+    const { current } = addCoin(user, amount);
 
     await interaction.reply({
       content: replace([
-        `You claimed your Daily reward!`,
-        `You received ${rewardCoins}%coin!`,
-        `You now have ${current}%coin.`,
+        `You gave <@${user.id}> ${amount}%coin!`,
+        `Now <@${user.id}>'s current amount of coins is ${current}%coin.`,
       ]),
       flags: [64],
     });

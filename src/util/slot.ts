@@ -3,7 +3,9 @@ export class SlotMachine {
   private static jackpotPercentage = 0.001;
   private static matchPercentage = 0.05;
 
-  constructor() {}
+  constructor() {
+    return this;
+  }
 
   public spin(): number[] {
     const rand = Math.random();

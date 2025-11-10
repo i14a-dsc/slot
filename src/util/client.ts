@@ -60,7 +60,7 @@ export class SlotBot extends Client {
   }
 
   private async handleEvents() {
-    super.on("ready", ready);
+    super.on("clientReady", ready);
     super.on("interactionCreate", interactionCreate);
   }
 
