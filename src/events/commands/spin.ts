@@ -126,6 +126,9 @@ export const command: Command = {
             `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
             `あなたは... リーチです！`,
             `あなたの賭け金 ${bet}%coin が返還されました！`,
+            `あなたの現在のコイン残高は ${getCoins(
+              interaction.user
+            )}%coin です`,
           ]),
         });
         addCoin(interaction.user, bet);
@@ -134,7 +137,7 @@ export const command: Command = {
         await interaction.editReply({
           content: replace([
             `# %${machine.results[0]} %${machine.results[1]} %${machine.results[2]}`,
-            `あなたは... ${machine.judge()}です！`,
+            `あなたは... 負け です:sob:`,
             `あなたの賭け金 ${bet}%coin が闇の中へ...`,
             `あなたの現在のコイン残高は ${getCoins(
               interaction.user
