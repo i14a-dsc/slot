@@ -1,7 +1,7 @@
 export class SlotMachine {
   private _results: number[] = [];
-  private static jackpotPercentage = 0.001;
-  private static matchPercentage = 0.05;
+  private static jackpotPercentage = 0.01;
+  private static matchPercentage = 0.1;
 
   constructor() {
     return this;
@@ -35,7 +35,7 @@ export class SlotMachine {
   }
 
   private random() {
-    return Math.floor(Math.random() * 9) + 1;
+    return Math.floor(Math.random() * 7) + 1;
   }
 
   get results() {
