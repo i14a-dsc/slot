@@ -15,9 +15,12 @@ export const command: Command = {
     integration_types: [0, 1],
   },
   execute: async (interaction) => {
-    if (!client.config.permissions.admin.includes(interaction.user.id)) {
+    if (
+      !client.config.permissions.admin.includes(interaction.user.username) ||
+      !client.config.permissions.admin.includes(interaction.user.id)
+    ) {
       await interaction.reply({
-        content: "This command is cannot be used by .",
+        content: "Sorry, but you are not allowed to use this command.",
         flags: [64],
       });
       return;
@@ -26,7 +29,7 @@ export const command: Command = {
       content: "Updating from github...",
       flags: [64],
     });
-    exec("git pull", (error, stdout, stderr) => {
+    exec("git pull", (error, stdout) => {
       if (error) {
         interaction.editReply({
           content: "Error updating from github...",
